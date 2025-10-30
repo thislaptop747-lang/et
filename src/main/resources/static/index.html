@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>expense tracker</title>
+    <title>Cache - Expense Tracker</title>
     <style>
         * { 
             margin: 0; 
@@ -27,21 +27,26 @@
         
         header {
             margin-bottom: 80px;
+            text-align: center;
         }
         
-        h1 {
-            font-size: 72px;
-            font-weight: 400;
-            letter-spacing: -3px;
+        .logo {
+            font-size: 96px;
+            font-weight: 200;
+            letter-spacing: -4px;
             margin-bottom: 16px;
-            text-transform: lowercase;
+            background: linear-gradient(135deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .subtitle {
+        .tagline {
             color: #666;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 300;
-            letter-spacing: 0.5px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
         
         .stats-grid {
@@ -57,6 +62,11 @@
             background: #000;
             padding: 48px 32px;
             text-align: center;
+            transition: background 0.3s;
+        }
+        
+        .stat-card:hover {
+            background: #0a0a0a;
         }
         
         .stat-label {
@@ -70,12 +80,12 @@
         
         .stat-value {
             font-size: 48px;
-            font-weight: 300;
+            font-weight: 200;
             letter-spacing: -2px;
         }
         
         .section-title {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 300;
             margin-bottom: 32px;
             letter-spacing: -1px;
@@ -84,13 +94,16 @@
         
         .form-section {
             margin-bottom: 80px;
+            background: #0a0a0a;
+            padding: 48px;
+            border: 1px solid #1a1a1a;
         }
         
         .form-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 24px;
+            margin-bottom: 32px;
         }
         
         input, select {
@@ -98,7 +111,7 @@
             border: none;
             border-bottom: 1px solid #333;
             color: #fff;
-            padding: 16px 0;
+            padding: 16px 4px;
             font-size: 16px;
             font-family: inherit;
             font-weight: 300;
@@ -127,7 +140,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px 0;
+            padding: 16px 4px;
         }
         
         input[type="checkbox"] {
@@ -168,8 +181,8 @@
             color: #000;
             border: none;
             padding: 20px 48px;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
@@ -210,6 +223,7 @@
             gap: 8px;
             margin-bottom: 32px;
             flex-wrap: wrap;
+            justify-content: center;
         }
         
         .filter-btn {
@@ -283,7 +297,7 @@
         
         .expense-amount {
             font-size: 28px;
-            font-weight: 300;
+            font-weight: 200;
             letter-spacing: -1px;
             white-space: nowrap;
         }
@@ -332,8 +346,8 @@
         }
         
         @media (max-width: 768px) {
-            h1 {
-                font-size: 48px;
+            .logo {
+                font-size: 64px;
             }
             
             .stats-grid {
@@ -350,228 +364,253 @@
                 align-items: flex-start;
                 gap: 20px;
             }
+            
+            .form-section {
+                padding: 32px 24px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1>expense tracker</h1>
-        <p class="subtitle">track. analyze. optimize.</p>
-    </header>
-
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-label">Total Spent</div>
-            <div class="stat-value" id="totalSpent">$0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Expenses</div>
-            <div class="stat-value" id="totalCount">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">This Month</div>
-            <div class="stat-value" id="monthSpent">$0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Average</div>
-            <div class="stat-value" id="avgExpense">$0</div>
-        </div>
-    </div>
-
-    <div class="form-section">
-        <h2 class="section-title">add new expense</h2>
-        <form id="expenseForm">
-            <div class="form-grid">
-                <input type="text" id="description" placeholder="description" required>
-                <input type="number" id="amount" placeholder="amount" step="0.01" required>
-                <select id="category" required>
-                    <option value="">category</option>
-                    <option value="Food">food</option>
-                    <option value="Transport">transport</option>
-                    <option value="Entertainment">entertainment</option>
-                    <option value="Bills">bills</option>
-                    <option value="Shopping">shopping</option>
-                    <option value="Health">health</option>
-                    <option value="Other">other</option>
-                </select>
-                <input type="date" id="date" required>
-                <select id="paymentMethod">
-                    <option value="Cash">cash</option>
-                    <option value="Card">card</option>
-                    <option value="UPI">upi</option>
-                    <option value="Other">other</option>
-                </select>
-                <div class="checkbox-wrapper">
-                    <input type="checkbox" id="recurring">
-                    <label for="recurring">recurring expense</label>
-                </div>
+    <div class="container">
+        <header>
+            <div class="logo">cache</div>
+            <p class="tagline">minimal expense tracking</p>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Spent</div>
+                <div class="stat-value" id="totalSpent">₹0</div>
             </div>
-            <button type="submit">add expense</button>
-        </form>
-    </div>
-
-    <div class="top-bar">
-        <h2 class="section-title" style="margin: 0;">all expenses</h2>
-        <div class="action-buttons">
-            <button class="btn-secondary btn-small" onclick="downloadCSV()">download csv</button>
-            <button class="btn-secondary btn-small" onclick="clearAll()">clear all</button>
+            <div class="stat-card">
+                <div class="stat-label">Expenses</div>
+                <div class="stat-value" id="totalCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">This Month</div>
+                <div class="stat-value" id="monthSpent">₹0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Average</div>
+                <div class="stat-value" id="avgExpense">₹0</div>
+            </div>
         </div>
+        
+        <div class="form-section">
+            <h2 class="section-title">add new expense</h2>
+            <form id="expenseForm">
+                <div class="form-grid">
+                    <input type="text" id="description" placeholder="description" required>
+                    <input type="number" id="amount" placeholder="amount (₹)" step="0.01" required>
+                    <select id="category" required>
+                        <option value="">category</option>
+                        <option value="Food">food</option>
+                        <option value="Transport">transport</option>
+                        <option value="Entertainment">entertainment</option>
+                        <option value="Bills">bills</option>
+                        <option value="Shopping">shopping</option>
+                        <option value="Health">health</option>
+                        <option value="Other">other</option>
+                    </select>
+                    <input type="date" id="date" required>
+                    <select id="paymentMethod">
+                        <option value="Cash">cash</option>
+                        <option value="Card">card</option>
+                        <option value="UPI">upi</option>
+                        <option value="Other">other</option>
+                    </select>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="recurring">
+                        <label for="recurring">recurring expense</label>
+                    </div>
+                </div>
+                <button type="submit">add expense</button>
+            </form>
+        </div>
+        
+        <div class="top-bar">
+            <h2 class="section-title" style="margin: 0;">all expenses</h2>
+            <div class="action-buttons">
+                <button class="btn-secondary btn-small" onclick="downloadCSV()">download csv</button>
+                <button class="btn-secondary btn-small" onclick="clearAll()">clear all</button>
+            </div>
+        </div>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterCategory('all')">all</button>
+            <button class="filter-btn" onclick="filterCategory('Food')">food</button>
+            <button class="filter-btn" onclick="filterCategory('Transport')">transport</button>
+            <button class="filter-btn" onclick="filterCategory('Entertainment')">entertainment</button>
+            <button class="filter-btn" onclick="filterCategory('Bills')">bills</button>
+            <button class="filter-btn" onclick="filterCategory('Shopping')">shopping</button>
+            <button class="filter-btn" onclick="filterCategory('Health')">health</button>
+            <button class="filter-btn" onclick="filterCategory('Other')">other</button>
+        </div>
+        
+        <div class="expense-list" id="expenseList"></div>
     </div>
-
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterCategory('all')">all</button>
-        <button class="filter-btn" onclick="filterCategory('Food')">food</button>
-        <button class="filter-btn" onclick="filterCategory('Transport')">transport</button>
-        <button class="filter-btn" onclick="filterCategory('Entertainment')">entertainment</button>
-        <button class="filter-btn" onclick="filterCategory('Bills')">bills</button>
-        <button class="filter-btn" onclick="filterCategory('Shopping')">shopping</button>
-        <button class="filter-btn" onclick="filterCategory('Health')">health</button>
-        <button class="filter-btn" onclick="filterCategory('Other')">other</button>
-    </div>
-
-    <div class="expense-list" id="expenseList"></div>
-</div>
-
-<script>
-    let allExpenses = [];
-    let currentFilter = 'all';
-    document.getElementById('date').valueAsDate = new Date();
-    loadExpenses();
-
-    document.getElementById('expenseForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const expense = {
-            description: document.getElementById('description').value,
-            amount: parseFloat(document.getElementById('amount').value),
-            category: document.getElementById('category').value,
-            date: document.getElementById('date').value,
-            paymentMethod: document.getElementById('paymentMethod').value,
-            recurring: document.getElementById('recurring').checked
-        };
-        try {
-            const response = await fetch('/api/expenses', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(expense)
-            });
-            if (response.ok) {
-                document.getElementById('expenseForm').reset();
-                document.getElementById('date').valueAsDate = new Date();
-                loadExpenses();
+    
+    <script>
+        let allExpenses = [];
+        let currentFilter = 'all';
+        let userId = localStorage.getItem('cache_user_id');
+        
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            localStorage.setItem('cache_user_id', userId);
+        }
+        
+        document.getElementById('date').valueAsDate = new Date();
+        loadExpenses();
+        
+        document.getElementById('expenseForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const expense = {
+                description: document.getElementById('description').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                category: document.getElementById('category').value,
+                date: document.getElementById('date').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                recurring: document.getElementById('recurring').checked
+            };
+            try {
+                const response = await fetch('/api/expenses', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-User-Id': userId
+                    },
+                    body: JSON.stringify(expense)
+                });
+                if (response.ok) {
+                    document.getElementById('expenseForm').reset();
+                    document.getElementById('date').valueAsDate = new Date();
+                    await loadExpenses();
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
+        });
+        
+        async function loadExpenses() {
+            try {
+                const response = await fetch('/api/expenses', {
+                    headers: { 'X-User-Id': userId }
+                });
+                allExpenses = await response.json();
+                filterCategory(currentFilter);
+                await updateStats();
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    });
-
-    async function loadExpenses() {
-        try {
-            const response = await fetch('/api/expenses');
-            allExpenses = await response.json();
-            filterCategory(currentFilter);
-            updateStats();
-        } catch (error) {
-            console.error('Error:', error);
+        
+        function filterCategory(category) {
+            currentFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = category === 'all' ? allExpenses : allExpenses.filter(e => e.category === category);
+            renderExpenses(filtered);
         }
-    }
-
-    function filterCategory(category) {
-        currentFilter = category;
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        const filtered = category === 'all' ? allExpenses : allExpenses.filter(e => e.category === category);
-        renderExpenses(filtered);
-    }
-
-    function renderExpenses(expenses) {
-        const list = document.getElementById('expenseList');
-        if (expenses.length === 0) {
-            list.innerHTML = '<div class="empty-state">no expenses yet</div>';
-            return;
-        }
-        list.innerHTML = expenses.map(expense => `
-            <div class="expense-item">
-                <span class="expense-category">${expense.category.toLowerCase()}</span>
-                <div>
-                    <div class="expense-description">${expense.description}</div>
-                    <div class="expense-meta">${expense.paymentMethod.toLowerCase()}${expense.recurring ? ' • recurring' : ''}</div>
+        
+        function renderExpenses(expenses) {
+            const list = document.getElementById('expenseList');
+            if (expenses.length === 0) {
+                list.innerHTML = '<div class="empty-state">no expenses yet</div>';
+                return;
+            }
+            list.innerHTML = expenses.map(expense => `
+                <div class="expense-item">
+                    <span class="expense-category">${expense.category.toLowerCase()}</span>
+                    <div>
+                        <div class="expense-description">${expense.description}</div>
+                        <div class="expense-meta">${expense.paymentMethod.toLowerCase()}${expense.recurring ? ' • recurring' : ''}</div>
+                    </div>
+                    <div class="expense-amount">₹${expense.amount.toFixed(2)}</div>
+                    <div class="expense-date">${formatDate(expense.date)}</div>
+                    <div class="expense-actions">
+                        <button class="btn-secondary btn-small" onclick="deleteExpense(${expense.id})">delete</button>
+                    </div>
                 </div>
-                <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
-                <div class="expense-date">${formatDate(expense.date)}</div>
-                <div class="expense-actions">
-                    <button class="btn-secondary btn-small" onclick="deleteExpense(${expense.id})">delete</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function deleteExpense(id) {
-        if (!confirm('delete this expense?')) return;
-        try {
-            await fetch(`/api/expenses/${id}`, { method: 'DELETE' });
-            loadExpenses();
-        } catch (error) {
-            console.error('Error:', error);
+            `).join('');
         }
-    }
-
-    async function updateStats() {
-        try {
-            const response = await fetch('/api/expenses/stats');
-            const stats = await response.json();
-            document.getElementById('totalSpent').textContent = '$' + Math.round(stats.total || 0);
-            document.getElementById('totalCount').textContent = stats.count || 0;
-            const now = new Date();
-            const monthExpenses = allExpenses.filter(e => {
-                const expenseDate = new Date(e.date);
-                return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
-            });
-            const monthTotal = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
-            document.getElementById('monthSpent').textContent = '$' + Math.round(monthTotal);
-            const avg = stats.count > 0 ? stats.total / stats.count : 0;
-            document.getElementById('avgExpense').textContent = '$' + Math.round(avg);
-        } catch (error) {
-            console.error('Error:', error);
+        
+        async function deleteExpense(id) {
+            if (!confirm('delete this expense?')) return;
+            try {
+                await fetch(`/api/expenses/${id}`, { 
+                    method: 'DELETE',
+                    headers: { 'X-User-Id': userId }
+                });
+                await loadExpenses();
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = date.getDate();
-        const month = date.toLocaleDateString('en-US', { month: 'short' }).toLowerCase();
-        const year = date.getFullYear();
-        return `${day} ${month} ${year}`;
-    }
-
-    async function downloadCSV() {
-        try {
-            const response = await fetch('/api/expenses/csv');
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'expenses.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } catch (error) {
-            console.error('Error:', error);
+        
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/expenses/stats', {
+                    headers: { 'X-User-Id': userId }
+                });
+                const stats = await response.json();
+                document.getElementById('totalSpent').textContent = '₹' + Math.round(stats.total || 0);
+                document.getElementById('totalCount').textContent = stats.count || 0;
+                const now = new Date();
+                const monthExpenses = allExpenses.filter(e => {
+                    const expenseDate = new Date(e.date);
+                    return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
+                });
+                const monthTotal = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+                document.getElementById('monthSpent').textContent = '₹' + Math.round(monthTotal);
+                const avg = stats.count > 0 ? stats.total / stats.count : 0;
+                document.getElementById('avgExpense').textContent = '₹' + Math.round(avg);
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    }
-
-    async function clearAll() {
-        if (!confirm('delete all expenses? this cannot be undone.')) return;
-        try {
-            const promises = allExpenses.map(e => fetch(`/api/expenses/${e.id}`, { method: 'DELETE' }));
-            await Promise.all(promises);
-            loadExpenses();
-        } catch (error) {
-            console.error('Error:', error);
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.toLocaleDateString('en-US', { month: 'short' }).toLowerCase();
+            const year = date.getFullYear();
+            return `${day} ${month} ${year}`;
         }
-    }
-</script>
+        
+        async function downloadCSV() {
+            try {
+                const response = await fetch('/api/expenses/csv', {
+                    headers: { 'X-User-Id': userId }
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'cache-expenses.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
+        async function clearAll() {
+            if (!confirm('delete all expenses? this cannot be undone.')) return;
+            try {
+                const promises = allExpenses.map(e => fetch(`/api/expenses/${e.id}`, { 
+                    method: 'DELETE',
+                    headers: { 'X-User-Id': userId }
+                }));
+                await Promise.all(promises);
+                await loadExpenses();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>
-
