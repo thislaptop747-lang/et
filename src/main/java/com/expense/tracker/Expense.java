@@ -14,6 +14,7 @@ public class Expense {
     private LocalDate date;
     private String paymentMethod;
     private boolean recurring;
+    private String userId;
 
     public Expense() {}
 
@@ -37,4 +38,7 @@ public class Expense {
     
     public boolean isRecurring() { return recurring; }
     public void setRecurring(boolean recurring) { this.recurring = recurring; }
+    
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 }
