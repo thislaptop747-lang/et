@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expense tracker</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        header {
+            margin-bottom: 80px;
+        }
+        
+        h1 {
+            font-size: 72px;
+            font-weight: 400;
+            letter-spacing: -3px;
+            margin-bottom: 16px;
+            text-transform: lowercase;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: #1a1a1a;
+            margin-bottom: 80px;
+            border: 1px solid #1a1a1a;
+        }
+        
+        .stat-card {
+            background: #000;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: -2px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 32px;
+            letter-spacing: -1px;
+            text-transform: lowercase;
+        }
+        
+        .form-section {
+            margin-bottom: 80px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        input, select {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #333;
+            color: #fff;
+            padding: 16px 0;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 300;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-bottom-color: #fff;
+        }
+        
+        input::placeholder {
+            color: #444;
+        }
+        
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23666' stroke-width='2'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right center;
+            padding-right: 24px;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 0;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: 1px solid #333;
+            appearance: none;
+            background: transparent;
+            position: relative;
+        }
+        
+        input[type="checkbox"]:checked {
+            background: #fff;
+        }
+        
+        input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        label {
+            color: #666;
+            font-size: 14px;
+            font-weight: 300;
+            cursor: pointer;
+        }
+        
+        button {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 20px 48px;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #333;
+            padding: 12px 24px;
+            font-size: 11px;
+        }
+        
+        .btn-secondary:hover {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .btn-small {
+            padding: 12px 24px;
+            font-size: 11px;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: transparent;
+            color: #666;
+            border: 1px solid #222;
+            padding: 12px 24px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 400;
+        }
+        
+        .filter-btn:hover {
+            border-color: #fff;
+            color: #fff;
+            background: transparent;
+            transform: none;
+        }
+        
+        .filter-btn.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+        
+        .expense-list {
+            border-top: 1px solid #1a1a1a;
+        }
+        
+        .expense-item {
+            padding: 32px 0;
+            border-bottom: 1px solid #1a1a1a;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto;
+            gap: 40px;
+            align-items: center;
+            transition: opacity 0.3s;
+        }
+        
+        .expense-item:hover {
+            opacity: 0.7;
+        }
+        
+        .expense-category {
+            display: inline-block;
+            padding: 6px 16px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 0;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .expense-description {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+        
+        .expense-meta {
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 300;
+        }
+        
+        .expense-amount {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+        
+        .expense-date {
+            color: #666;
+            font-size: 13px;
+            font-weight: 300;
+            white-space: nowrap;
+        }
+        
+        .expense-actions button {
+            min-width: 80px;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 120px 20px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 48px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .expense-item {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>expense tracker</h1>
+        <p class="subtitle">track. analyze. optimize.</p>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Spent</div>
+            <div class="stat-value" id="totalSpent">$0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Expenses</div>
+            <div class="stat-value" id="totalCount">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value" id="monthSpent">$0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Average</div>
+            <div class="stat-value" id="avgExpense">$0</div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2 class="section-title">add new expense</h2>
+        <form id="expenseForm">
+            <div class="form-grid">
+                <input type="text" id="description" placeholder="description" required>
+                <input type="number" id="amount" placeholder="amount" step="0.01" required>
+                <select id="category" required>
+                    <option value="">category</option>
+                    <option value="Food">food</option>
+                    <option value="Transport">transport</option>
+                    <option value="Entertainment">entertainment</option>
+                    <option value="Bills">bills</option>
+                    <option value="Shopping">shopping</option>
+                    <option value="Health">health</option>
+                    <option value="Other">other</option>
+                </select>
+                <input type="date" id="date" required>
+                <select id="paymentMethod">
+                    <option value="Cash">cash</option>
+                    <option value="Card">card</option>
+                    <option value="UPI">upi</option>
+                    <option value="Other">other</option>
+                </select>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="recurring">
+                    <label for="recurring">recurring expense</label>
+                </div>
+            </div>
+            <button type="submit">add expense</button>
+        </form>
+    </div>
+
+    <div class="top-bar">
+        <h2 class="section-title" style="margin: 0;">all expenses</h2>
+        <div class="action-buttons">
+            <button class="btn-secondary btn-small" onclick="downloadCSV()">download csv</button>
+            <button class="btn-secondary btn-small" onclick="clearAll()">clear all</button>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterCategory('all')">all</button>
+        <button class="filter-btn" onclick="filterCategory('Food')">food</button>
+        <button class="filter-btn" onclick="filterCategory('Transport')">transport</button>
+        <button class="filter-btn" onclick="filterCategory('Entertainment')">entertainment</button>
+        <button class="filter-btn" onclick="filterCategory('Bills')">bills</button>
+        <button class="filter-btn" onclick="filterCategory('Shopping')">shopping</button>
+        <button class="filter-btn" onclick="filterCategory('Health')">health</button>
+        <button class="filter-btn" onclick="filterCategory('Other')">other</button>
+    </div>
+
+    <div class="expense-list" id="expenseList"></div>
+</div>
+
+<script>
+    let allExpenses = [];
+    let currentFilter = 'all';
+    document.getElementById('date').valueAsDate = new Date();
+    loadExpenses();
+
+    document.getElementById('expenseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const expense = {
+            description: document.getElementById('description').value,
+            amount: parseFloat(document.getElementById('amount').value),
+            category: document.getElementById('category').value,
+            date: document.getElementById('date').value,
+            paymentMethod: document.getElementById('paymentMethod').value,
+            recurring: document.getElementById('recurring').checked
+        };
+        try {
+            const response = await fetch('/api/expenses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(expense)
+            });
+            if (response.ok) {
+                document.getElementById('expenseForm').reset();
+                document.getElementById('date').valueAsDate = new Date();
+                loadExpenses();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    async function loadExpenses() {
+        try {
+            const response = await fetch('/api/expenses');
+            allExpenses = await response.json();
+            filterCategory(currentFilter);
+            updateStats();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function filterCategory(category) {
+        currentFilter = category;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        const filtered = category === 'all' ? allExpenses : allExpenses.filter(e => e.category === category);
+        renderExpenses(filtered);
+    }
+
+    function renderExpenses(expenses) {
+        const list = document.getElementById('expenseList');
+        if (expenses.length === 0) {
+            list.innerHTML = '<div class="empty-state">no expenses yet</div>';
+            return;
+        }
+        list.innerHTML = expenses.map(expense => `
+            <div class="expense-item">
+                <span class="expense-category">${expense.category.toLowerCase()}</span>
+                <div>
+                    <div class="expense-description">${expense.description}</div>
+                    <div class="expense-meta">${expense.paymentMethod.toLowerCase()}${expense.recurring ? ' • recurring' : ''}</div>
+                </div>
+                <div class="expense-amount">$${expense.amount.toFixed(2)}</div>
+                <div class="expense-date">${formatDate(expense.date)}</div>
+                <div class="expense-actions">
+                    <button class="btn-secondary btn-small" onclick="deleteExpense(${expense.id})">delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    async function deleteExpense(id) {
+        if (!confirm('delete this expense?')) return;
+        try {
+            await fetch(`/api/expenses/${id}`, { method: 'DELETE' });
+            loadExpenses();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function updateStats() {
+        try {
+            const response = await fetch('/api/expenses/stats');
+            const stats = await response.json();
+            document.getElementById('totalSpent').textContent = '$' + Math.round(stats.total || 0);
+            document.getElementById('totalCount').textContent = stats.count || 0;
+            const now = new Date();
+            const monthExpenses = allExpenses.filter(e => {
+                const expenseDate = new Date(e.date);
+                return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
+            });
+            const monthTotal = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+            document.getElementById('monthSpent').textContent = '$' + Math.round(monthTotal);
+            const avg = stats.count > 0 ? stats.total / stats.count : 0;
+            document.getElementById('avgExpense').textContent = '$' + Math.round(avg);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = date.toLocaleDateString('en-US', { month: 'short' }).toLowerCase();
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
+    }
+
+    async function downloadCSV() {
+        try {
+            const response = await fetch('/api/expenses/csv');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'expenses.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function clearAll() {
+        if (!confirm('delete all expenses? this cannot be undone.')) return;
+        try {
+            const promises = allExpenses.map(e => fetch(`/api/expenses/${e.id}`, { method: 'DELETE' }));
+            await Promise.all(promises);
+            loadExpenses();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
+</body>
+</html>
+
